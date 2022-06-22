@@ -12,6 +12,11 @@ use DDD\Http\Sites\SiteCrawlController;
 use DDD\Http\Pages\PageController;
 use DDD\Http\Pages\PageTagController;
 use DDD\Http\Files\FileController;
+use DDD\Http\Surveys\SurveyController;
+use DDD\Http\Surveys\ParticipantController;
+use DDD\Http\Surveys\QuestionController;
+use DDD\Http\Surveys\OptionController;
+use DDD\Http\Surveys\AnswerController;
 
 use DDD\Http\Test\TestController; // Delete
 
@@ -86,5 +91,38 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('/{tag:slug}', [TagController::class, 'show']);
         Route::put('/{tag:slug}', [TagController::class, 'update']);
         Route::delete('/{tag:slug}', [TagController::class, 'destroy']);
+    });
+
+    // Surveys
+    Route::prefix('surveys')->group(function() {
+        Route::get('/',            [SurveyController::class, 'index']);
+        Route::post('/',           [SurveyController::class, 'store']);
+        Route::get('/{survey}',    [SurveyController::class, 'show']);
+        Route::delete('/{survey}', [SurveyController::class, 'destroy']);
+    });
+
+    // Survey Participants
+    Route::prefix('/surveys/{survey}')->group(function () {
+        Route::get('/participants',                  [ParticipantController::class, 'index']);
+        Route::post('/participants',                 [ParticipantController::class, 'store']);
+        Route::delete('/participants/{participant}', [ParticipantController::class, 'destroy']);
+    });
+
+    // Questions
+    Route::prefix('/surveys/{survey}')->group(function () {
+        Route::post('/questions',              [QuestionController::class, 'store']);
+        Route::get('/questions/{question}',    [QuestionController::class, 'show']);
+        Route::delete('/questions/{question}', [QuestionController::class, 'destroy']);
+
+        // Options
+        Route::prefix('/questions/{question}')->group(function () {
+            Route::post('/options',            [OptionController::class, 'store']);
+            Route::delete('/options/{option}', [OptionController::class, 'destroy']);
+
+            // Answers
+            Route::prefix('/options/{option}')->group(function () {
+                Route::post('/answers', [AnswerController::class, 'store']);
+            });
+        });
     });
 });
