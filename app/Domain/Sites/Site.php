@@ -15,7 +15,7 @@ use DDD\App\Traits\BelongsToOrganization;
 class Site extends Model
 {
     use HasFactory,
-        SoftDeletes,
+        // SoftDeletes,
         BelongsToOrganization;
 
     protected $guarded = [
