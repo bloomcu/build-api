@@ -91,6 +91,11 @@ Route::prefix('{organization:slug}/pages/export')->group(function() {
     Route::get('/csv', [PageExportToCSVController::class, 'export']);
 });
 
+// Public - Site
+Route::prefix('{organization:slug}/sites')->group(function() {
+    Route::get('/{site}', [SiteController::class, 'show']);
+});
+
 Route::middleware('auth:sanctum')->group(function() {
     // Auth
     Route::post('auth/logout', AuthLogoutController::class);
@@ -176,7 +181,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('{organization:slug}/sites')->group(function() {
         Route::get('/', [SiteController::class, 'index']);
         Route::post('/', [SiteController::class, 'store']);
-        Route::get('/{site}', [SiteController::class, 'show']);
         Route::put('/{site}', [SiteController::class, 'update']);
         Route::delete('/{site}', [SiteController::class, 'destroy']);
     });
